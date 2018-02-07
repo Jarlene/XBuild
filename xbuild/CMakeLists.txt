@@ -11,7 +11,7 @@ file(GLOB_RECURSE src_files src/*.cpp src/*.cc)
 foreach(source_file ${src_files})
     list(APPEND srcList ${source_file})
 endforeach()
-
+include_directories("${CMAKE_SOURCE_DIR}")
 set(SOURCE_FILES ${headList} ${srcList})
 add_library(XBuild SHARED ${SOURCE_FILES})
 SET_TARGET_PROPERTIES(XBuild PROPERTIES OUTPUT_NAME "XBuild" CLEAN_DIRECT_OUTPUT 1 SUFFIX ".so")

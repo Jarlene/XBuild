@@ -6,6 +6,9 @@
 #define XBUILD_IR_H
 
 #include "Expr.h"
+#include "Buffer.h"
+#include "Parameter.h"
+
 
 namespace xbuild {
 
@@ -139,12 +142,16 @@ namespace xbuild {
 
     struct Load : public ExprNode<Load> {
         std::string name;
-
+//        Buffer<> image;
+        Parameter param;
         Expr predicate, index;
         NODE_TYPE(Load)
 
+
+        template <class T>
         static Expr make(Type type, const std::string &name,
-                         Expr index, Expr predicate);
+                         Expr index, Buffer<T> image,
+                         Parameter param, Expr predicate);
 
     };
 
@@ -207,11 +214,11 @@ namespace xbuild {
     struct Store : public StmtNode<Store> {
         std::string name;
         Expr predicate, value, index;
-//        Parameter param;
+        Parameter param;
         NODE_TYPE(Store)
 
         static Stmt make(const std::string &name, Expr value, Expr index,
-                /*Parameter param,*/ Expr predicate);
+                         Parameter param, Expr predicate);
     };
 
 
@@ -282,9 +289,8 @@ namespace xbuild {
 
         NODE_TYPE(Realize)
 
-        static Stmt
-        make(const std::string &name, const std::vector<Type> &types, /*MemoryType memory_type,*/ const Region &bounds,
-             Expr condition, Stmt body);
+        static Stmt make(const std::string &name, const std::vector<Type> &types, /*MemoryType memory_type,*/
+                         const Region &bounds, Expr condition, Stmt body);
 
 
     };
@@ -327,9 +333,7 @@ namespace xbuild {
         /** Reduction variables hang onto their domains */
 //        ReductionDomain reduction_domain;
         NODE_TYPE(Variable)
-        static Expr make(Type type, const std::string &name) {
-            return make(type, name/*, Buffer<>(), Parameter(), ReductionDomain()*/);
-        }
+        static Expr make(Type type, const std::string &name) ;
 
 //        static Expr make(Type type, const std::string &name/*, Parameter param*/) {
 //            return make(type, name/*, Buffer<>(), param, ReductionDomain()*/);

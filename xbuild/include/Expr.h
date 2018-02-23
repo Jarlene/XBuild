@@ -5,10 +5,9 @@
 #ifndef XBUILD_EXPR_H
 #define XBUILD_EXPR_H
 
-#include <stdlib.h>
+#include <cstdint>
 #include <atomic>
-#include <assert.h>
-
+#include <cassert>
 #include "IntrusivePtr.h"
 #include "RefCount.h"
 #include "IRHandle.h"
@@ -106,9 +105,9 @@ namespace xbuild {
 
     template<typename T>
     struct ExprNode : public BaseExprNode {
-        void accept(IRVisitor *v) const override;
+        void accept(IRVisitor *v) const override ;
 
-        Expr mutate_expr(IRMutator *v) const override;
+        Expr mutate_expr(IRMutator *v) const override ;
 
         ExprNode() : BaseExprNode(T::_node_type) {
 
@@ -121,9 +120,9 @@ namespace xbuild {
 
     template<typename T>
     struct StmtNode : public BaseStmtNode {
-        void accept(IRVisitor *v) const;
+        void accept(IRVisitor *v) const override ;
 
-        Stmt mutate_stmt(IRMutator *v) const;
+        Stmt mutate_stmt(IRMutator *v) const override ;
 
         StmtNode() : BaseStmtNode(T::_node_type) {}
 

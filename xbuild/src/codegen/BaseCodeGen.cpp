@@ -78,9 +78,27 @@ namespace xbuild {
         std::lock_guard<std::mutex> lock(initialize_llvm_mutex);
         if (!llvm_initialized) {
             InitializeNativeTarget();
-            InitializeNativeTargetAsmPrinter();
-            InitializeNativeTargetAsmParser();
+//            InitializeNativeTargetAsmPrinter();
+//            InitializeNativeTargetAsmParser();
+#define LLVM_TARGET(target)         \
+            Initialize##target##Target();
+#include <llvm/Config/Targets.def>
+#undef LLVM_TARGET
+
+#define LLVM_ASM_PARSER(target)     \
+            Initialize##target##AsmParser();
+#include <llvm/Config/AsmParsers.def>
+#undef LLVM_ASM_PARSER
+
+#define LLVM_ASM_PRINTER(target)    \
+            Initialize##target##AsmPrinter();
+#include <llvm/Config/AsmPrinters.def>
+#undef LLVM_ASM_PRINTER
             llvm_initialized = true;
         }
+    }
+
+    BaseCodeGen::~BaseCodeGen() {
+        delete builder;
     }
 }

@@ -91,9 +91,7 @@ namespace xbuild {
 
         static bool validate_target_string(const std::string &s);
 
-        void set_feature(Feature f, bool value = true) {
-
-        }
+        void set_feature(Feature f, bool value = true) ;
 
         bool features_any_of(std::vector<Feature> test_features) const;
 

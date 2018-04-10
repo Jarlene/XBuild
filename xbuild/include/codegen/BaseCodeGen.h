@@ -11,20 +11,22 @@
 #include "Target.h"
 
 
-//#define LLVM_TARGET(target)         \
-//            Initialize##target##Target();
-//#include <llvm/Config/Targets.def>
-//#undef LLVM_TARGET
-//
-//#define LLVM_ASM_PARSER(target)     \
-//            Initialize##target##AsmParser();
-//#include <llvm/Config/AsmParsers.def>
-//#undef LLVM_ASM_PARSER
-//
-//#define LLVM_ASM_PRINTER(target)    \
-//            Initialize##target##AsmPrinter();
-//#include <llvm/Config/AsmPrinters.def>
-//#undef LLVM_ASM_PRINTER
+
+#define LLVM_TARGET(target) \
+    inline void Initialize##target##Target() {}
+#include <llvm/Config/Targets.def>
+#undef LLVM_TARGET
+
+#define LLVM_ASM_PARSER(target)     \
+    inline void Initialize##target##AsmParser() {}
+#include <llvm/Config/AsmParsers.def>
+#undef LLVM_ASM_PARSER
+
+#define LLVM_ASM_PRINTER(target)    \
+    inline void Initialize##target##AsmPrinter() {}
+#include <llvm/Config/AsmPrinters.def>
+#undef LLVM_ASM_PRINTER
+
 
 
 #define InitializeTarget(target)              \
@@ -101,6 +103,7 @@ namespace xbuild {
 
         static void initialize_llvm() ;
 
+        virtual ~BaseCodeGen();
 
         virtual int codegen() = 0;
 

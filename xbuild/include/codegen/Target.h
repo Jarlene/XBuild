@@ -95,6 +95,10 @@ namespace xbuild {
 
         bool features_any_of(std::vector<Feature> test_features) const;
 
+        bool features_all_of(std::vector<Feature> test_features) const;
+
+        bool has_feature(Feature f) const;
+
     private:
         std::bitset<FeatureEnd> features;
     };

@@ -13,50 +13,45 @@ namespace xbuild {
 
 
     enum LoggerType : int {
-        DEBUG,
-        INFO,
-        WARNING,
-        FATAL
+        INFO = 0,
+        WARNING = 1,
+        ERROR = 2,
+        FATAL = 3
     };
 
     class Logger {
-        const bool logging;
     public:
-
-        Logger(LoggerType &type) : logging(type >= debug()) {
+        Logger(const LoggerType &type) : type(type) {
 
         }
 
-        template<class T>
-        Logger &operator<<(T &&x) {
-            if (logging) {
-                std::cerr << std::forward<T>(x);
+        ~Logger() {
+            stream()  << std::endl << std::flush;
+        }
+
+        std::ostream &stream() {
+            switch (type) {
+                case LoggerType::INFO:
+                    return std::cout;
+                case LoggerType::WARNING:
+                case LoggerType::ERROR:
+                case LoggerType::FATAL:
+                    return std::cerr;
+                default :
+                    return std::cout;
             }
-            return *this;
         }
 
-        static LoggerType parse(const std::string &e) {
-            std::transform(e.begin(), e.end(), e.begin(), std::tolower);
-            if ("debug" == e) {
-                return LoggerType::DEBUG;
-            } else if ("info" == e) {
-                return LoggerType::INFO;
-            } else if ("warning" == e) {
-                return LoggerType::WARNING;
-            } else if ("fatal" == e) {
-                return LoggerType::FATAL;
-            }
-            return LoggerType::DEBUG;
-        }
+    private:
+        LoggerType type;
 
-        static int debug() {
-            string s = getEnv("Xbuild_Logger");
-            LoggerType type = parse(s);
-            return type;
-        }
 
     };
 }
+
+
+#define LOG(level) \
+     xbuild::Logger(xbuild::LoggerType::level).stream() << "[" << __FILE__<< ":" <<  __LINE__ <<"("<< __FUNCTION__<<")" << "]:" << std::flush  \
 
 
 #endif //XBUILD_LOGGER_H

@@ -4,6 +4,7 @@ project(XBuild)
 set(CMAKE_CXX_STANDARD 14)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
+include_directories("${CMAKE_SOURCE_DIR}")
 include(LLVM)
 add_subdirectory(sample)
 add_subdirectory(xbuild)
